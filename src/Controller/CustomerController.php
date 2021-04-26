@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CustomerRepository;
+use App\Repository\PresenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CustomerController
 {
     private $customerRepository;
+    private $presenceRepository;
 
-    public function __construct(CustomerRepository $customerRepository)
+    public function __construct(CustomerRepository $customerRepository,PresenceRepository  $presenceRepository)
     {
         $this->customerRepository = $customerRepository;
+        $this->presenceRepository = $presenceRepository;
     }
 
     /**
@@ -30,18 +33,11 @@ class CustomerController
        $password = $data['password'];
        $faceData = $data['faceData'];
        $status = $data['status'];
+       $CIN = $data['CIN'];
 
-       // $firstName = $data['firstName'];
-        //$lastName = $data['lastName'];
-        //$email = $data['email'];
-        //$phoneNumber = $data['phoneNumber'];
-        //$faceData = $data['faceData'];
 
-       // if (empty($firstName) || empty($lastName) || empty($email) || empty($phoneNumber) || empty($faceData) ) {
-         //   throw new NotFoundHttpException('Expecting mandatory parameters!');
-        //}
-
-        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status);
+        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN);
+        $this->presenceRepository->savePresence($CIN);
 
         return new JsonResponse(['status' => 'Customer created!'], Response::HTTP_CREATED);
     }
@@ -55,9 +51,10 @@ class CustomerController
         $data = [
             'id' => $customer->getId(),
             'userName' => $customer->getUserName(),
-            'lastName' => $customer->getLastName(),
+            'password' => $customer->getPassword(),
             'faceData' => $customer->getFaceData(),
             'status' => $customer->getStatus(),
+            'CIN' => $customer->getCIN()
         ];
 
         return new JsonResponse($data, Response::HTTP_OK);
@@ -77,6 +74,7 @@ class CustomerController
                 'password' => $customer->getPassword(),
                 'faceData' => $customer->getFaceData(),
                 'status' => $customer->getStatus(),
+                'CIN' => $customer->getCIN()
             ];
         }
 
@@ -90,10 +88,11 @@ class CustomerController
         $customer = $this->customerRepository->findOneBy(['id' => $id]);
         $data = json_decode($request->getContent(), true);
 
-        empty($data['firstName']) ? true : $customer->setFirstName($data['firstName']);
+        empty($data['userName']) ? true : $customer->setUserName($data['userName']);
         empty($data['password']) ? true : $customer->setPassword($data['password']);
         empty($data['faceData']) ? true : $customer->setFaceData($data['faceData']);
         empty($data['status']) ? true : $customer->setStatus($data['status']);
+        empty($data['CIN']) ? true : $customer->setStatus($data['CIN']);
         $updatedCostumer = $this->customerRepository->updateCustomer($customer);
 
         return new JsonResponse($updatedCostumer->toArray(), Response::HTTP_OK);

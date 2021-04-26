@@ -37,6 +37,11 @@ class Customer
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $CIN;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,7 @@ class Customer
             'id' => $this->getId(),
             'userName' => $this->getUserName(),
             'password' => $this->getPassword(),
+            'cin' => $this->getCIN(),
             'faceData' => $this ->getFaceData()
         ];
     }
@@ -97,6 +103,18 @@ class Customer
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCIN(): ?int
+    {
+        return $this->CIN;
+    }
+
+    public function setCIN(int $CIN): self
+    {
+        $this->CIN = $CIN;
 
         return $this;
     }
