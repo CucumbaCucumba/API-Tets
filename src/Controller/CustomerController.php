@@ -81,11 +81,11 @@ class CustomerController
         return new JsonResponse($data, Response::HTTP_OK);
     }
     /**
-     * @Route("/customers/{id}", name="update_customer", methods={"PUT"})
+     * @Route("/customers/{CIN}", name="update_customer", methods={"PUT"})
      */
-    public function update($id, Request $request): JsonResponse
+    public function update($CIN, Request $request): JsonResponse
     {
-        $customer = $this->customerRepository->findOneBy(['id' => $id]);
+        $customer = $this->customerRepository->findOneBy(['CIN' => $CIN]);
         $data = json_decode($request->getContent(), true);
 
         empty($data['userName']) ? true : $customer->setUserName($data['userName']);
