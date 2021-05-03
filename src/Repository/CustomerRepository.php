@@ -55,7 +55,7 @@ class CustomerRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function saveCustomer($userName, $password, $faceData,$status,$CIN)
+    public function saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage)
     {
         $newCustomer = new Customer();
 
@@ -64,7 +64,8 @@ class CustomerRepository extends ServiceEntityRepository
             ->setPassword($password)
             ->setFaceData($faceData)
             ->setCIN($CIN)
-            ->setStatus($status);
+            ->setStatus($status)
+            ->setWage($Wage);
 
         $this->manager->persist($newCustomer);
         $this->manager->flush();

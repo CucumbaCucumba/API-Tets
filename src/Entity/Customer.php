@@ -42,6 +42,11 @@ class Customer
      */
     private $CIN;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $Wage;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,7 +96,8 @@ class Customer
             'userName' => $this->getUserName(),
             'password' => $this->getPassword(),
             'cin' => $this->getCIN(),
-            'faceData' => $this ->getFaceData()
+            'faceData' => $this ->getFaceData(),
+            'Wage' => $this ->getWage()
         ];
     }
 
@@ -115,6 +121,18 @@ class Customer
     public function setCIN(int $CIN): self
     {
         $this->CIN = $CIN;
+
+        return $this;
+    }
+
+    public function getWage(): ?int
+    {
+        return $this->Wage;
+    }
+
+    public function setWage(int $Wage): self
+    {
+        $this->Wage = $Wage;
 
         return $this;
     }

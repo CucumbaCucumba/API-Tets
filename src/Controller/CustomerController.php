@@ -34,19 +34,20 @@ class CustomerController
        $faceData = $data['faceData'];
        $status = $data['status'];
        $CIN = $data['CIN'];
+       $Wage = $data['Wage'];
 
 
-        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN);
+        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage);
         $this->presenceRepository->savePresence($CIN);
 
         return new JsonResponse(['status' => 'Customer created!'], Response::HTTP_CREATED);
     }
     /**
-     * @Route("/customers/{id}", name="get_one_customer", methods={"GET"})
+     * @Route("/customers/{CIN}", name="get_one_customer", methods={"GET"})
      */
-    public function get($id): JsonResponse
+    public function get($CIN): JsonResponse
     {
-        $customer = $this->customerRepository->findOneBy(['id' => $id]);
+        $customer = $this->customerRepository->findOneBy(['CIN' => $CIN]);
 
         $data = [
             'id' => $customer->getId(),
@@ -54,6 +55,7 @@ class CustomerController
             'password' => $customer->getPassword(),
             'faceData' => $customer->getFaceData(),
             'status' => $customer->getStatus(),
+            'Wage' => $customer->getWage(),
             'CIN' => $customer->getCIN()
         ];
 
@@ -74,7 +76,8 @@ class CustomerController
                 'password' => $customer->getPassword(),
                 'faceData' => $customer->getFaceData(),
                 'status' => $customer->getStatus(),
-                'CIN' => $customer->getCIN()
+                'CIN' => $customer->getCIN(),
+                'Wage' => $customer->getWage()
             ];
         }
 
@@ -92,6 +95,7 @@ class CustomerController
         empty($data['password']) ? true : $customer->setPassword($data['password']);
         empty($data['faceData']) ? true : $customer->setFaceData($data['faceData']);
         empty($data['status']) ? true : $customer->setStatus($data['status']);
+        empty($data['Wage']) ? true : $customer->setStatus($data['status']);
         empty($data['CIN']) ? true : $customer->setStatus($data['CIN']);
         $updatedCostumer = $this->customerRepository->updateCustomer($customer);
 
