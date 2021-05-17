@@ -55,31 +55,35 @@ class CustomerRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage)
-    {
-        $newCustomer = new Customer();
+  public function saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage,$image,$workLocation)
+  {
+      $newCustomer = new Customer();
 
-        $newCustomer
-            ->setUserName($userName)
-            ->setPassword($password)
-            ->setFaceData($faceData)
-            ->setCIN($CIN)
-            ->setStatus($status)
-            ->setWage($Wage);
+      $newCustomer
+          ->setUserName($userName)
+          ->setPassword($password)
+          ->setFaceData($faceData)
+          ->setCIN($CIN)
+          ->setStatus($status)
+          ->setWage($Wage)
+          ->setImage($image)
+          ->setWorkLocation($workLocation)
+      ;
 
-        $this->manager->persist($newCustomer);
-        $this->manager->flush();
-    }
-    public function updateCustomer(Customer $customer): Customer
-    {
-        $this->manager->persist($customer);
-        $this->manager->flush();
 
-        return $customer;
-    }
-    public function removeCustomer(Customer $customer)
-    {
-        $this->manager->remove($customer);
-        $this->manager->flush();
-    }
+      $this->manager->persist($newCustomer);
+      $this->manager->flush();
+  }
+  public function updateCustomer(Customer $customer): Customer
+  {
+      $this->manager->persist($customer);
+      $this->manager->flush();
+
+      return $customer;
+  }
+  public function removeCustomer(Customer $customer)
+  {
+      $this->manager->remove($customer);
+      $this->manager->flush();
+  }
 }

@@ -2,21 +2,20 @@
 
 namespace App\Entity;
 
-
+use DateTimeInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  */
 class Customer
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -38,6 +37,7 @@ class Customer
     private $status;
 
     /**
+     * @ORM\Id
      * @ORM\Column(type="integer")
      */
     private $CIN;
@@ -47,10 +47,17 @@ class Customer
      */
     private $Wage;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $image;
+
+        /**
+     * @ORM\Column(type="string")
+     */
+    private $workLocation;
+   
+
 
     public function getUserName(): ?string
     {
@@ -92,12 +99,12 @@ class Customer
     public function toArray(): array
     {
         return [
-            'id' => $this->getId(),
             'userName' => $this->getUserName(),
             'password' => $this->getPassword(),
             'cin' => $this->getCIN(),
             'faceData' => $this ->getFaceData(),
-            'Wage' => $this ->getWage()
+            'Wage' => $this ->getWage(),
+            'image'=> $this ->getImage(),
         ];
     }
 
@@ -135,5 +142,31 @@ class Customer
         $this->Wage = $Wage;
 
         return $this;
+    }
+
+
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setWorkLocation(string $workLocation): self
+    {
+        $this->workLocation = $workLocation;
+
+        return $this;
+    }
+
+    public function getWorkLocation(): ?string
+    {
+        return $this->workLocation;
     }
 }

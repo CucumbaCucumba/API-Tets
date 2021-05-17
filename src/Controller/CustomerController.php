@@ -35,9 +35,12 @@ class CustomerController
        $status = $data['status'];
        $CIN = $data['CIN'];
        $Wage = $data['Wage'];
+       $image = $data['image'];
+       $workLocation = $data['workLocation'];
 
 
-        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage);
+
+        $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage,$image,$workLocation);
         $this->presenceRepository->savePresence($CIN);
 
         return new JsonResponse(['status' => 'Customer created!'], Response::HTTP_CREATED);
@@ -50,13 +53,14 @@ class CustomerController
         $customer = $this->customerRepository->findOneBy(['CIN' => $CIN]);
 
         $data = [
-            'id' => $customer->getId(),
             'userName' => $customer->getUserName(),
             'password' => $customer->getPassword(),
             'faceData' => $customer->getFaceData(),
             'status' => $customer->getStatus(),
             'Wage' => $customer->getWage(),
-            'CIN' => $customer->getCIN()
+            'CIN' => $customer->getCIN(),
+            'image' => $customer->getImage(),
+            'workLocation' => $customer->getWorkLocation(),
         ];
 
         return new JsonResponse($data, Response::HTTP_OK);
@@ -71,13 +75,14 @@ class CustomerController
 
         foreach ($customers as $customer) {
             $data[] = [
-                'id' => $customer->getId(),
                 'userName' => $customer->getuserName(),
                 'password' => $customer->getPassword(),
                 'faceData' => $customer->getFaceData(),
                 'status' => $customer->getStatus(),
                 'CIN' => $customer->getCIN(),
-                'Wage' => $customer->getWage()
+                'Wage' => $customer->getWage(),
+                'image' => $customer->getImage(),
+                'workLocation' => $customer->getWorkLocation(),
             ];
         }
 
@@ -95,8 +100,10 @@ class CustomerController
         empty($data['password']) ? true : $customer->setPassword($data['password']);
         empty($data['faceData']) ? true : $customer->setFaceData($data['faceData']);
         empty($data['status']) ? true : $customer->setStatus($data['status']);
-        empty($data['Wage']) ? true : $customer->setStatus($data['status']);
-        empty($data['CIN']) ? true : $customer->setStatus($data['CIN']);
+        empty($data['Wage']) ? true : $customer->setWage($data['Wage']);
+        empty($data['CIN']) ? true : $customer->setCin($data['CIN']);
+        empty($data['image']) ? true : $customer->setImage($data['image']);
+        empty($data['workLocation']) ? true : $customer->setWorkLocation($data['workLocation']);
         $updatedCostumer = $this->customerRepository->updateCustomer($customer);
 
         return new JsonResponse($updatedCostumer->toArray(), Response::HTTP_OK);

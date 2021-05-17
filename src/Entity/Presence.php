@@ -12,12 +12,6 @@ class Presence
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $CIN;
@@ -27,10 +21,7 @@ class Presence
      */
     private $Dates;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getCIN(): ?string
     {
@@ -58,7 +49,6 @@ class Presence
     public function toArray(): array
 {
     return [
-        'id' => $this->getId(),
         'cin' => $this->getCIN(),
         'dates' => $this ->getDates()
     ];
