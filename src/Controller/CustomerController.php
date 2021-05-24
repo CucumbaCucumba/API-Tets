@@ -41,8 +41,9 @@ class CustomerController
 
 
         $this->customerRepository->saveCustomer($userName, $password, $faceData,$status,$CIN,$Wage,$image,$workLocation);
+        if($status == 'user'){
         $this->presenceRepository->savePresence($CIN);
-
+        }
         return new JsonResponse(['status' => 'Customer created!'], Response::HTTP_CREATED);
     }
     /**
@@ -109,13 +110,15 @@ class CustomerController
         return new JsonResponse($updatedCostumer->toArray(), Response::HTTP_OK);
     }
     /**
-     * @Route("/customers/{id}", name="delete_customer", methods={"DELETE"})
+     * @Route("/customers/{CIN}", name="delete_customer", methods={"DELETE"})
      */
-    public function delete($id): JsonResponse
+    public function delete($CIN): JsonResponse
     {
-        $customer = $this->customerRepository->findOneBy(['id' => $id]);
+        $customer = $this->customerRepository->findOneBy(['CIN' => $CIN]);
+        $presence = $this->presenceRepository->findOneBy(['CIN' => $CIN]);
 
         $this->customerRepository->removeCustomer($customer);
+        $this->presenceRepository->removePresence($presence);
 
         return new JsonResponse(['status' => 'Customer deleted'], Response::HTTP_NO_CONTENT);
     }
