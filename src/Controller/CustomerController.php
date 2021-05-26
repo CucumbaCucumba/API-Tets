@@ -16,6 +16,8 @@ class CustomerController
     private $customerRepository;
     private $presenceRepository;
 
+    
+
     public function __construct(CustomerRepository $customerRepository,PresenceRepository  $presenceRepository)
     {
         $this->customerRepository = $customerRepository;
@@ -75,7 +77,8 @@ class CustomerController
         $data = [];
 
         foreach ($customers as $customer) {
-            $data[] = [
+            $data['result'][]= [
+            
                 'userName' => $customer->getuserName(),
                 'password' => $customer->getPassword(),
                 'faceData' => $customer->getFaceData(),
